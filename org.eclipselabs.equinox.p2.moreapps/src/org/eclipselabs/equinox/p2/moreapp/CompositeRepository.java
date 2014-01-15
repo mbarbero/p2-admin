@@ -37,8 +37,7 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 	public Object start(IApplicationContext context) throws Exception {
 		String[] args = (String[]) context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 		try {
-		
-		processCommandLineArgs(args);
+			processCommandLineArgs(args);
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			usage();
