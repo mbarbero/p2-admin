@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipselabs.equinox.p2.composite.repository"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipselabs.equinox.p2.moreapp.CompositeRepository">
+         </run>
+      </application>
+   </extension>
+
+</plugin>

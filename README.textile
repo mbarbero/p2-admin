@@ -1,0 +1,51 @@
+h1. p2 admin command line
+
+This eclipse headless application (*less than 20MB*) provides you the following 14 tools to manage your p2 repositories:
+
+* org.eclipse.equinox.p2.director
+* org.eclipse.equinox.p2.garbagecollector.application
+* org.eclipse.equinox.p2.publisher.InstallPublisher
+* org.eclipse.equinox.p2.publisher.EclipseGenerator
+* org.eclipse.equinox.p2.publisher.ProductPublisher
+* org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher
+* org.eclipse.equinox.p2.repository.repo2runnable
+* org.eclipse.equinox.p2.repository.metadataverifier
+* org.eclipse.equinox.p2.artifact.repository.mirrorApplication
+* org.eclipse.equinox.p2.metadata.repository.mirrorApplication
+* org.eclipse.equinox.p2.updatesite.UpdateSitePublisher
+* org.eclipse.equinox.p2.publisher.UpdateSitePublisher
+* org.eclipse.equinox.p2.publisher.CategoryPublisher
+* org.eclipselabs.equinox.p2.composite.repository
+
+Their documentation is available on the following web pages:
+
+* http://wiki.eclipse.org/Equinox/p2
+* http://help.eclipse.org/kepler/topic/org.eclipse.platform.doc.isv/guide/p2_overview.htm
+
+The last one *org.eclipselabs.equinox.p2.composite.repository* is an application providing the same set of features as the composite ant task (see http://wiki.eclipse.org/Equinox/p2/Composite_Repositories_(new))
+
+h2. org.eclipselabs.equinox.p2.composite.repository
+
+This application can be called to create and modify composite repositories.
+
+bc. 
+eclipse -application org.eclipselabs.equinox.p2.composite.repository -location repositoryURI [-add repository-list] [-remove repository-list] [-validate] [-failOnExists] [-compressed]
+
+* *-location* URI of composite repository to create / modify
+* *-add* Comma separated list of repositories URI to add to the composite
+* *-remove* Comma separated list of repositories URI to remove from the composite
+* *-validate* Child repositories claiming to contain the same artifact are compared using the given comparator. Either @org.eclipse.equinox.p2.repository.tools.jar.comparator@ or @org.eclipse.equinox.artifact.md5.comparator@
+* *-failOnExists* Whether we should fail if the repository already exists (Default is false)
+* *-compressed* Whether the composite repository should compressed (Default is false)
+
+h2. Requirements
+
+* Java SE 6
+
+h2. Build
+
+Clone this repository and launch @mvn clean package@ in the root folder.
+
+h2. License
+
+Copyright (c) 2014 Obeo. All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html 

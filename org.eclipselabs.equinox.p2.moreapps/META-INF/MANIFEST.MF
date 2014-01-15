@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Additional Applications for p2
+Bundle-SymbolicName: org.eclipselabs.equinox.p2.moreapps;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.eclipse.equinox.p2.repository.tools,
+ org.eclipse.core.runtime,
+ org.eclipse.equinox.p2.core,
+ org.eclipse.equinox.p2.repository,
+ com.google.guava
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Obeo
