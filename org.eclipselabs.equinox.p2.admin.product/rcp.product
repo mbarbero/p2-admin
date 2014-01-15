@@ -14,7 +14,7 @@
 
    <windowImages/>
 
-   <launcher name="p2admin">
+   <launcher name="p2-admin">
       <solaris/>
       <win useIco="false">
          <bmp/>
