@@ -1,6 +1,6 @@
 h1. p2 admin command line
 
-This eclipse headless application (*less than 20MB*) provides you the following 14 tools to manage your p2 repositories:
+This command line application (*less than 10MB*) provides you the following 14 tools to manage your p2 repositories:
 
 * org.eclipse.equinox.p2.director
 * org.eclipse.equinox.p2.garbagecollector.application
@@ -29,7 +29,7 @@ h2. org.eclipselabs.equinox.p2.composite.repository
 This application can be called to create and modify composite repositories.
 
 bc. 
-eclipse -application org.eclipselabs.equinox.p2.composite.repository -location repositoryURI [-add repository-list] [-remove repository-list] [-validate] [-failOnExists] [-compressed]
+p2admin -application org.eclipselabs.equinox.p2.composite.repository -location repositoryURI [-add repository-list] [-remove repository-list] [-validate] [-failOnExists] [-compressed]
 
 * *-location* URI of composite repository to create / modify
 * *-add* Comma separated list of repositories URI to add to the composite

@@ -8,14 +8,13 @@
 
    <launcherArgs>
       <programArgs>-noSplash</programArgs>
-      <vmArgs>-Xms40m
--Xmx256m</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -Xms40m -Xmx256m</vmArgsMac>
+      <vmArgs>-Xms40m -Xmx256m</vmArgs>
+      <vmArgsMac>-Xms40m -Xmx256m</vmArgsMac>
    </launcherArgs>
 
    <windowImages/>
 
-   <launcher name="eclipse">
+   <launcher name="p2admin">
       <solaris/>
       <win useIco="false">
          <bmp/>
@@ -129,7 +128,6 @@ Java and all Java-based trademarks are trademarks of Sun Microsystems, Inc. in t
 
    <plugins>
       <plugin id="com.google.guava"/>
-      <plugin id="com.ibm.icu"/>
       <plugin id="javax.xml"/>
       <plugin id="org.apache.commons.codec"/>
       <plugin id="org.apache.commons.httpclient"/>
@@ -137,14 +135,8 @@ Java and all Java-based trademarks are trademarks of Sun Microsystems, Inc. in t
       <plugin id="org.apache.httpcomponents.httpclient"/>
       <plugin id="org.apache.httpcomponents.httpcore"/>
       <plugin id="org.eclipse.core.contenttype"/>
-      <plugin id="org.eclipse.core.expressions"/>
-      <plugin id="org.eclipse.core.filesystem"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.macosx" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.core.net"/>
-      <plugin id="org.eclipse.core.resources"/>
       <plugin id="org.eclipse.core.runtime"/>
       <plugin id="org.eclipse.ecf"/>
       <plugin id="org.eclipse.ecf.filetransfer"/>
@@ -184,7 +176,6 @@ Java and all Java-based trademarks are trademarks of Sun Microsystems, Inc. in t
       <plugin id="org.eclipse.equinox.p2.touchpoint.eclipse"/>
       <plugin id="org.eclipse.equinox.p2.touchpoint.natives"/>
       <plugin id="org.eclipse.equinox.p2.transport.ecf"/>
-      <plugin id="org.eclipse.equinox.p2.updatechecker"/>
       <plugin id="org.eclipse.equinox.p2.updatesite"/>
       <plugin id="org.eclipse.equinox.preferences"/>
       <plugin id="org.eclipse.equinox.registry"/>
