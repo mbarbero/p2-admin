@@ -7,7 +7,7 @@
    </configIni>
 
    <launcherArgs>
-      <programArgs>-noSplash</programArgs>
+      <programArgs>-noSplash --launcher.suppressErrors</programArgs>
       <vmArgs>-Xms40m -Xmx256m</vmArgs>
       <vmArgsMac>-Xms40m -Xmx256m</vmArgsMac>
    </launcherArgs>
