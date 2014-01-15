@@ -15,10 +15,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.p2.internal.repository.tools.CompositeRepositoryApplication;
 import org.eclipse.equinox.p2.internal.repository.tools.RepositoryDescriptor;
-import org.eclipse.equinox.p2.repository.ICompositeRepository;
 import org.eclipse.equinox.p2.repository.IRepository;
-import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
-import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
 import com.google.common.base.Splitter;
 
@@ -62,13 +59,14 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 	 * 
 	 */
 	private void usage() {
-		System.err.println("Usage: -location repositoryURI [-add repository-list] [-remove repository-list] [-validate] [-failOnExists] [-compressed]");
-		System.err.println("  -location      URI of composite repository to create / modify");
-		System.err.println("  -add           Comma separated list of repositories URI to add to the composite");
-		System.err.println("  -remove        Comma separated list of repositories URI to remove from the composite");
-		System.err.println("  -validate      Child repositories claiming to contain the same artifact are compared using the given comparator. Either 'org.eclipse.equinox.p2.repository.tools.jar.comparator' or 'org.eclipse.equinox.artifact.md5.comparator'");
-		System.err.println("  -failOnExists  Whether we should fail if the repository already exists. (Default is false)");
-		System.err.println("  -compressed    Whether the composite repository should compressed. (Default is false)");
+		System.err.println("Usage: -location repositoryURI [-add repository-list] [-remove repository-list] [-repositoryName name] [-validate] [-failOnExists] [-compressed]");
+		System.err.println("  -location        URI of composite repository to create / modify");
+		System.err.println("  -add             Comma separated list of repositories URI to add to the composite");
+		System.err.println("  -remove          Comma separated list of repositories URI to remove from the composite");
+		System.err.println("  -repositoryName  The name of the composite as it should appears to client");
+		System.err.println("  -validate        Child repositories claiming to contain the same artifact are compared using the given comparator. Either 'org.eclipse.equinox.p2.repository.tools.jar.comparator' or 'org.eclipse.equinox.artifact.md5.comparator'");
+		System.err.println("  -failOnExists    Whether we should fail if the repository already exists. (Default is false)");
+		System.err.println("  -compressed      Whether the composite repository should compressed. (Default is false)");
 	}
 
 	/*
@@ -78,6 +76,7 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 		if (args == null)
 			throw new Exception("No argument provided");
 		boolean compressed = false;
+		String name = null;
 		RepositoryDescriptor destination = null;
 		for (int i = 0; i < args.length; i++) {
 			String option = args[i];
@@ -123,10 +122,17 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 			if (option.equalsIgnoreCase("-compressed")) { //$NON-NLS-1$
 				compressed = true;
 			}
+			
+			if (option.equalsIgnoreCase("-repositoryName")) { //$NON-NLS-1$
+				name = arg;
+			}
 		}
 		
 		if (destination != null) {
 			destination.setCompressed(compressed);
+			if (name != null) {
+				destination.setName(name);
+			}
 		}
 	}
 	

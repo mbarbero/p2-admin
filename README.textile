@@ -29,11 +29,12 @@ h2. org.eclipselabs.equinox.p2.composite.repository
 This application can be called to create and modify composite repositories.
 
 bc. 
-p2admin -application org.eclipselabs.equinox.p2.composite.repository -location repositoryURI [-add repository-list] [-remove repository-list] [-validate] [-failOnExists] [-compressed]
+p2admin -application org.eclipselabs.equinox.p2.composite.repository -location repositoryURI [-add repository-list] [-remove repository-list] [-repositoryName name] [-validate] [-failOnExists] [-compressed]
 
 * *-location* URI of composite repository to create / modify
 * *-add* Comma separated list of repositories URI to add to the composite
 * *-remove* Comma separated list of repositories URI to remove from the composite
+* *-repositoryName* The name of the composite as it should appears to client 
 * *-validate* Child repositories claiming to contain the same artifact are compared using the given comparator. Either @org.eclipse.equinox.p2.repository.tools.jar.comparator@ or @org.eclipse.equinox.artifact.md5.comparator@
 * *-failOnExists* Whether we should fail if the repository already exists (Default is false)
 * *-compressed* Whether the composite repository should compressed (Default is false)
