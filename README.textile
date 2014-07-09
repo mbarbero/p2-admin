@@ -38,6 +38,7 @@ p2-admin -application org.eclipselabs.equinox.p2.composite.repository -location 
 * *-validate* Child repositories claiming to contain the same artifact are compared using the given comparator. Either @org.eclipse.equinox.p2.repository.tools.jar.comparator@ or @org.eclipse.equinox.artifact.md5.comparator@
 * *-failOnExists* Whether we should fail if the repository already exists (Default is false)
 * *-compressed* Whether the composite repository should compressed (Default is false)
+* *-list* List the repositories the "location" is composed of. Options other than @location@ are ignored when you use this option.
 
 h2. Requirements
 
