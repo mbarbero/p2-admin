@@ -10,14 +10,27 @@
  *******************************************************************************/
 package org.eclipselabs.equinox.p2.moreapp;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.internal.repository.tools.CompositeRepositoryApplication;
+import org.eclipse.equinox.p2.internal.repository.tools.Messages;
 import org.eclipse.equinox.p2.internal.repository.tools.RepositoryDescriptor;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.repository.ICompositeRepository;
 import org.eclipse.equinox.p2.repository.IRepository;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.osgi.util.NLS;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 /**
  * @author <a href="mailto:mikael.barbero@obeo.fr">Mikael Barbero</a>
@@ -28,6 +41,8 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 
 	private static Integer EXIT_ERR__COMMAND_LINE_ARGS = Integer.valueOf(255);
 	private static Integer EXIT_ERR__RUN = Integer.valueOf(256);
+	private boolean list;
+	private List<RepositoryDescriptor> destinationRepos = Lists.newArrayList();
 	
 	/** 
 	 * {@inheritDoc}
@@ -45,7 +60,15 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 		}
 		// perform the transformation
 		try {
-			run(null);
+			if (list) {
+				initRepositoriesForList();
+				ICompositeRepository<?> metadataRepo = (ICompositeRepository<?>) destinationMetadataRepository;
+				for (URI uri : metadataRepo.getChildren()) {
+					System.out.println(uri.toString());
+				}
+			} else {
+				run(null);
+			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			usage();
@@ -54,12 +77,63 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 		return IApplication.EXIT_OK;
 	}
 
+	private void initRepositoriesForList() throws ProvisionException {
+		IArtifactRepositoryManager artifactRepositoryManager = getArtifactRepositoryManager();
+		IMetadataRepositoryManager metadataRepositoryManager = getMetadataRepositoryManager();
+		
+		RepositoryDescriptor artifactRepoDescriptor = null;
+		RepositoryDescriptor metadataRepoDescriptor = null;
+
+		Iterator<RepositoryDescriptor> iter = destinationRepos.iterator();
+		while (iter.hasNext() && (artifactRepoDescriptor == null || metadataRepoDescriptor == null)) {
+			RepositoryDescriptor repo = iter.next();
+			if (repo.isArtifact() && artifactRepoDescriptor == null)
+				artifactRepoDescriptor = repo;
+			if (repo.isMetadata() && metadataRepoDescriptor == null)
+				metadataRepoDescriptor = repo;
+		}
+
+		if (artifactRepoDescriptor != null)
+			artifactRepositoryManager.removeRepository(artifactRepoDescriptor.getRepoLocation());
+
+			// first try and load to see if one already exists at that location.
+			try {
+				destinationArtifactRepository = artifactRepositoryManager.loadRepository(artifactRepoDescriptor.getRepoLocation(), null);
+			} catch (ProvisionException e) {
+				// re-throw the exception if we got anything other than "repo not found"
+				if (e.getStatus().getCode() != ProvisionException.REPOSITORY_NOT_FOUND) {
+					if (e.getCause() instanceof MalformedURLException)
+						throw new ProvisionException(NLS.bind(Messages.exception_invalidDestination, artifactRepoDescriptor.getRepoLocation()), e.getCause());
+					throw e;
+				}
+			}
+		if (metadataRepoDescriptor != null) {
+			metadataRepositoryManager.removeRepository(metadataRepoDescriptor.getRepoLocation());
+
+			// first try and load to see if one already exists at that location.
+			try {
+				destinationMetadataRepository = metadataRepositoryManager.loadRepository(metadataRepoDescriptor.getRepoLocation(), null);
+			} catch (ProvisionException e) {
+				// re-throw the exception if we got anything other than "repo not found"
+				if (e.getStatus().getCode() != ProvisionException.REPOSITORY_NOT_FOUND) {
+					if (e.getCause() instanceof MalformedURLException)
+						throw new ProvisionException(NLS.bind(Messages.exception_invalidDestination, metadataRepoDescriptor.getRepoLocation()), e.getCause());
+					throw e;
+				}
+			}
+		}
+
+		if (destinationMetadataRepository == null && destinationArtifactRepository == null)
+			throw new ProvisionException(Messages.AbstractApplication_no_valid_destinations);
+	}
+
 	/**
 	 * 
 	 */
 	private void usage() {
-		System.err.println("Usage: -location repositoryURI [-add repository-list] [-remove repository-list] [-repositoryName name] [-validate] [-failOnExists] [-compressed]");
+		System.err.println("Usage: -location repositoryURI [-list] [-add repository-list] [-remove repository-list] [-repositoryName name] [-validate] [-failOnExists] [-compressed]");
 		System.err.println("  -location        URI of composite repository to create / modify");
+		System.err.println("  -list            Whether the list of children should be printed on the standard output");
 		System.err.println("  -add             Comma separated list of repositories URI to add to the composite");
 		System.err.println("  -remove          Comma separated list of repositories URI to remove from the composite");
 		System.err.println("  -repositoryName  The name of the composite as it should appears to client");
@@ -125,6 +199,10 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 			if (option.equalsIgnoreCase("-repositoryName")) { //$NON-NLS-1$
 				name = arg;
 			}
+			
+			if (option.equalsIgnoreCase("-list")) {
+				list = true;
+			}
 		}
 		
 		if (destination != null) {
@@ -144,6 +222,11 @@ public class CompositeRepository extends CompositeRepositoryApplication implemen
 		return false;
 	}
 
+	@Override
+	public void addDestination(RepositoryDescriptor descriptor) {
+		super.addDestination(descriptor);
+		destinationRepos.add(descriptor);
+	}
 	
 	/** 
 	 * {@inheritDoc}
